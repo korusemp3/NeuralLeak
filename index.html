@@ -179,7 +179,7 @@
 .term-log { 
   font-family: "JetBrains Mono", monospace; 
   font-size: 14px;
-  line-height: 1.2; 
+  line-height: 1.1; 
   display: grid; 
   align-items: start; 
   gap: 0;
@@ -214,6 +214,26 @@
     /* entry pulse */
     @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
     .wrap{animation:pop .6s ease-out}
+	
+	/* === Uplink Status Bar === */
+.uplink {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.6px;
+}
+.uplink span {
+  color: var(--blue);
+  text-shadow: 0 0 6px rgba(77,163,255,.6), 0 0 10px rgba(255,69,103,.3);
+  animation: flicker 1.6s infinite;
+}
+@keyframes flicker {
+  0%, 18%, 22%, 25%, 53%, 57%, 100% { opacity: 1; }
+  20%, 24%, 55% { opacity: .4; }
+}
+
   </style>
 </head>
 <body>
@@ -290,14 +310,26 @@
 
 
       <footer>
-        <div class="tiny">© grey.protocol — autonomous relay node</div>
-        <div class="links tiny">
-          <a href="#" id="latestLink">latest leak</a>
-        </div>
-      </footer>
+  <div class="tiny">
+    © grey.protocol — autonomous relay node
+  </div>
+  <div class="tiny uplink">
+    uplink: <span id="uplinkData">A2F3-C7E9-9B01</span>
+  </div>
+</footer>
+
     </div>
   </div>
 
+<script>
+  setInterval(() => {
+    const uplink = document.getElementById("uplinkData");
+    const chars = "ABCDEF0123456789";
+    let str = "";
+    for (let i = 0; i < 12; i++) str += chars[Math.floor(Math.random() * chars.length)];
+    uplink.textContent = str.match(/.{1,4}/g).join("-");
+  }, 1000);
+</script>
 
 
 </body>
