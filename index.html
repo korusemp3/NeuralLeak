@@ -322,13 +322,25 @@
   </div>
 
 <script>
-  setInterval(() => {
-    const uplink = document.getElementById("uplinkData");
-    const chars = "ABCDEF0123456789";
-    let str = "";
-    for (let i = 0; i < 12; i++) str += chars[Math.floor(Math.random() * chars.length)];
-    uplink.textContent = str.match(/.{1,4}/g).join("-");
-  }, 1000);
+const uplink = document.getElementById("uplinkData");
+const chars = "ABCDEF0123456789";
+
+function updateUplink() {
+  const newStr = Array.from({ length: 12 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  const formatted = newStr.match(/.{1,4}/g).join("-");
+  
+  // 🔧 плавная замена без мерцания
+  if (uplink.textContent !== formatted) {
+    uplink.style.transition = "opacity 0.2s ease";
+    uplink.style.opacity = "0.6";
+    setTimeout(() => {
+      uplink.textContent = formatted;
+      uplink.style.opacity = "1";
+    }, 100);
+  }
+}
+
+setInterval(updateUplink, 1000);
 </script>
 
 
