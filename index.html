@@ -244,9 +244,10 @@
     const lines = [
       "handshake: SYN / ACK…", 
       "cipher: chacha20-poly1305", 
-      "route: ghost_net → med.subprocess", 
-      "status: online — reading…",
-      "// hint: replace this log with your latest leak title"
+      "routing node: med.subprocess_02",
+	  "firewall bypass: ghost_net relay",
+      "status: <b><span style='color:#34d399;'>encrypted uplink — ONLINE</span></b>",
+      "// incoming: classified feed [LEAK_00]"
     ];
     const term = document.getElementById('terminal');
     const latestLink = document.getElementById('latestLink');
@@ -257,7 +258,7 @@
         const s = lines[i];
         if(j < s.length){
           out += s[j++];
-          term.textContent = out + (Date.now()%600<300?"_":" ");
+          term.innerHTML = out + (Date.now()%600<300?"_":" ");
           requestAnimationFrame(tick);
         } else {
           out += "\n"; i++; j = 0; setTimeout(tick, 250);
