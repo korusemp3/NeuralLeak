@@ -94,6 +94,43 @@
     .tiny{font-size:11px; color:var(--muted)}
     .links a{color:#b6c7ff; text-decoration:none; border-bottom:1px dashed rgba(77,163,255,.5)}
 
+/* === LOGO GLITCH EFFECT === */
+.sig img {
+  animation: logoPulse 3s ease-in-out infinite, logoGlitch 1.8s steps(2, end) infinite;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6)) brightness(1.2);
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes logoGlitch {
+  0%, 90%, 100% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
+  }
+  10% {
+    transform: translate(1px, -1px);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  25% {
+    filter: hue-rotate(20deg) drop-shadow(0 0 8px rgba(255,255,255,0.7));
+  }
+  30% {
+    transform: translate(-1px, -1px);
+  }
+}
+
+
     /* entry pulse */
     @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
     .wrap{animation:pop .6s ease-out}
