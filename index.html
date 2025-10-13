@@ -239,46 +239,53 @@
     </div>
   </div>
 
-  <script>
-    // typewriter with glitch ticks
-    const lines = [
-      "handshake: SYN / ACK…", 
-      "cipher: chacha20-poly1305", 
-      "routing node: med.subprocess_02",
-	  "firewall bypass: ghost_net relay",
-      "status: <b><span style='color:#34d399;'>encrypted uplink — ONLINE</span></b>",
-      "// incoming: classified feed [LEAK_00]"
-    ];
-    const term = document.getElementById('terminal');
-    const latestLink = document.getElementById('latestLink');
+<script>
+  // lines: raw — для посимвольного набора; html — что добавляем в терминал когда строка допечатана
+  const lines = [
+    { raw: "handshake: SYN / ACK…", html: "handshake: <span style='color:#34d399;'>SYN / ACK…</span>" },
+    { raw: "cipher: chacha20-poly1305", html: "cipher: <span style='color:#4da3ff;'>chacha20-poly1305</span>" },
+    { raw: "routing node: med.subprocess_02", html: "routing node: <span style='color:#a9b8ff;'>med.subprocess_02</span>" },
+    { raw: "firewall bypass: ghost_net relay", html: "firewall bypass: <span style='color:#ff4567;'>ghost_net</span> relay" },
+    { raw: "status: encrypted uplink — ONLINE", html: "status: <b><span style='color:#34d399;'>encrypted uplink — ONLINE</span></b>" },
+    { raw: "// incoming: classified feed [LEAK_00]", html: "<span style='color:#ffcc66;'>// incoming: classified feed [LEAK_00]</span>" }
+  ];
 
-    let i = 0, j = 0, out = "";
-    function tick(){
-      if(i < lines.length){
-        const s = lines[i];
-        if(j < s.length){
-          out += s[j++];
-          term.innerHTML = out + (Date.now()%600<300?"_":" ");
-          requestAnimationFrame(tick);
-        } else {
-          out += "\n"; i++; j = 0; setTimeout(tick, 250);
-        }
+  const term = document.getElementById('terminal');
+  const latestLink = document.getElementById('latestLink');
+
+  let lineIndex = 0;
+  let charIndex = 0;
+  let typedRaw = "";    // visible during typing (plain)
+  let outHTML = "";     // final HTML that we render with innerHTML
+
+  function tick() {
+    if (lineIndex < lines.length) {
+      const current = lines[lineIndex];
+      if (charIndex < current.raw.length) {
+        // печатаем посимвольно ПЛОТНОГО ТЕКСТА (без HTML)
+        typedRaw += current.raw[charIndex++];
+        term.textContent = outHTML.replace(/\n/g, "\n") + typedRaw + (Date.now()%600<300 ? "_" : " ");
+        requestAnimationFrame(tick);
       } else {
-        term.textContent = out + "ready. ";
-        latestLink.href = './video/teaser.mp4';
+        // строка допечатана — переносим в outHTML как готовую HTML-строку
+        outHTML += current.html + "<br>";
+        typedRaw = "";
+        lineIndex++;
+        charIndex = 0;
+        // небольшая пауза между строками
+        setTimeout(tick, 220);
       }
+    } else {
+      // всё готово — финальный статус
+      outHTML += "ready.";
+      term.innerHTML = outHTML;
+      latestLink.href = './video/teaser.mp4';
     }
-    setTimeout(tick, 300);
+  }
 
-    // mild entry glitch on load
-    addEventListener('load', () => {
-      const w = document.querySelector('.wrap');
-      w.animate([
-        {filter:'none'},
-        {filter:'contrast(1.6) saturate(1.4) hue-rotate(8deg)'},
-        {filter:'none'}
-      ], {duration: 420, iterations: 1});
-    });
-  </script>
+  // старт
+  setTimeout(tick, 300);
+</script>
+
 </body>
 </html>
