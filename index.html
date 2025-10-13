@@ -175,6 +175,27 @@
   100% {opacity: 1; transform: translate(0,0);}
 }
 
+/* === Terminal CSS Typewriter (color-safe) === */
+.term-log { font-family:"JetBrains Mono", monospace; line-height:1.6; }
+.term-log .line {
+  --chars: 32;         /* длина строки в символах (поменяешь под каждую) */
+  --delay: 0s;         /* задержка старта для эффекта построчно */
+  display: inline-block;
+  white-space: nowrap;
+  overflow: hidden;
+  width: 0ch;
+  animation: type steps(var(--chars)) 1.4s var(--delay) forwards;
+}
+@keyframes type { to { width: var(--chars)ch; } }
+
+/* курсор на последней строке во время «набора» */
+.term-log .line.typing::after {
+  content: "_";
+  margin-left: 0;
+  animation: caret .6s step-end infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
+
 
     /* entry pulse */
     @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
@@ -201,9 +222,33 @@
 
       <section class="hero">
         <div class="term" role="region" aria-label="terminal">
-          <div class="hdr"><span class="dot"></span> <span> &gt; connecting… user: <b>K0R_MED</b></span></div>
-          <pre id="terminal"></pre>
-        </div>
+  <div class="hdr"><span class="dot"></span> <span> &gt; connecting… user: <b>K0R_MED</b></span></div>
+
+  <div class="term-log">
+    <div class="line typing" style="--chars: 26; --delay: .0s;">
+      handshake: <span style="color:#34d399;">SYN / ACK…</span>
+    </div><br>
+    <div class="line" style="--chars: 30; --delay: .25s;">
+      cipher: <span style="color:#4da3ff;">chacha20-poly1305</span>
+    </div><br>
+    <div class="line" style="--chars: 40; --delay: .50s;">
+      routing node: <span style="color:#a9b8ff;">med.subprocess_02</span>
+    </div><br>
+    <div class="line" style="--chars: 40; --delay: .75s;">
+      firewall bypass: <span style="color:#ff4567;">ghost_net</span> relay
+    </div><br>
+    <div class="line" style="--chars: 40; --delay: 1.00s;">
+      status: <b><span style="color:#34d399;">encrypted uplink — ONLINE</span></b>
+    </div><br>
+    <div class="line" style="--chars: 46; --delay: 1.25s;">
+      <span style="color:#ffcc66;">// incoming: classified feed [LEAK_00]</span>
+    </div><br>
+    <div class="line" style="--chars: 6; --delay: 1.50s;">
+      ready.
+    </div>
+  </div>
+</div>
+
 
         <div class="gallery" aria-label="latest frames">
 
