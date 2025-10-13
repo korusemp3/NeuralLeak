@@ -130,6 +130,51 @@
   }
 }
 
+/* === Hover Leak Overlay === */
+.hoverleak {
+  position: relative;
+  overflow: hidden;
+}
+
+.hoverleak .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .3s ease, backdrop-filter .3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.hoverleak:hover .overlay {
+  opacity: 1;
+  backdrop-filter: blur(4px);
+}
+
+.hoverleak .overlay-text {
+  color: #d9e2ff;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  padding: 10px 14px;
+  border: 1px solid rgba(77,163,255,.25);
+  background: rgba(10,15,25,0.45);
+  box-shadow: 0 0 14px rgba(77,163,255,.2);
+  border-radius: 8px;
+  animation: textGlitch 2s infinite steps(2,end);
+}
+
+@keyframes textGlitch {
+  10% {opacity: 0.9; transform: translate(1px,-1px);}
+  12% {opacity: 1; transform: translate(-1px,1px);}
+  20% {opacity: 1;}
+  70% {opacity: 0.98;}
+  100% {opacity: 1; transform: translate(0,0);}
+}
+
 
     /* entry pulse */
     @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
@@ -161,17 +206,29 @@
         </div>
 
         <div class="gallery" aria-label="latest frames">
-          <article class="card">
-  <img src="./assets/frame1test.png" alt="AI Frame 01" class="ph" style="object-fit:cover;width:100%;aspect-ratio:16/9;">
-  <div class="cap">FRAME_01 — frame1test</div>
-</article>
 
-          <article class="card">
-            <div class="ph"><span class="glitch" data-txt="FIELD LOG — 00">FIELD LOG — 00</span></div>
-            <div class="cap">short teaser (10–20s) goes to <code>/video/</code></div>
-          </article>
-        </div>
-      </section>
+  <!-- 🩸 первый кадр — с эффектом наведения -->
+  <article class="card hoverleak">
+    <img src="./assets/frame1test.png" alt="AI Frame 01" class="ph" style="object-fit:cover;width:100%;aspect-ratio:16/9;">
+    <div class="overlay">
+      <div class="overlay-text">
+        <b>[ACCESS: K0R_MED]</b><br>
+        «Двое в масках черепов. Работают быстро, без слов.<br>
+        Уводят раненого с кибер-рукой, прямо из-под дождя.<br>
+        <b>[SIGNAL LOST…]<b>
+      </div>
+    </div>
+    <div class="cap">FRAME_17 — civilkidnap_</div>
+  </article>
+
+  <!-- 💽 второй кадр — стандартный (остался как был) -->
+  <article class="card">
+    <div class="ph"><span class="glitch" data-txt="FIELD LOG — 00">FIELD LOG — 00</span></div>
+    <div class="cap">ERR <code>/video/</code></div>
+  </article>
+
+</div>
+
 
       <footer>
         <div class="tiny">© grey.protocol — autonomous relay node</div>
