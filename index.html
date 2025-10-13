@@ -177,16 +177,17 @@
 
 /* === Terminal CSS Typewriter (color-safe) === */
 .term-log { font-family:"JetBrains Mono", monospace; line-height:1.6; }
-.term-log .line {
-  --chars: 32;         /* длина строки в символах (поменяешь под каждую) */
-  --delay: 0s;         /* задержка старта для эффекта построчно */
-  display: inline-block;
-  white-space: nowrap;
-  overflow: hidden;
-  width: 0ch;
-  animation: type steps(var(--chars)) 1.4s var(--delay) forwards;
+.term-log .line{
+  --chars: 32;           /* кол-во символов (оценочно) */
+  --delay: 0s;           /* задержка старта */
+  display:inline-block;
+  white-space:nowrap;
+  /* вместо width-анимации — точный "срез" текста */
+  clip-path: inset(0 100% 0 0);
+  animation: typeclip 1.4s steps(var(--chars)) var(--delay) forwards;
+  will-change: clip-path;
 }
-@keyframes type { to { width: var(--chars)ch; } }
+@keyframes typeclip{ to { clip-path: inset(0 0 0 0); } }
 
 /* курсор на последней строке во время «набора» */
 .term-log .line.typing::after {
