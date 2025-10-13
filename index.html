@@ -208,7 +208,7 @@
       <div class="scanline" aria-hidden="true"></div>
       <header class="top">
         <div class="logo">
-          <<div class="sig" aria-hidden="true">
+          <div class="sig" aria-hidden="true">
   <img src="./assets/logo.v1.png" alt="K0R_MED Logo" style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,0.4));">
 </div>
 
@@ -260,7 +260,7 @@
         <b>[ACCESS: K0R_MED]</b><br>
         «Двое в масках черепов. Работают быстро, без слов.<br>
         Уводят раненого с кибер-рукой, прямо из-под дождя.<br>
-        <b>[SIGNAL LOST…]<b>
+        <b>[SIGNAL LOST…]</b>
       </div>
     </div>
     <div class="cap">FRAME_17 — civilkidnap_</div>
@@ -284,53 +284,7 @@
     </div>
   </div>
 
-<script>
-  // lines: raw — для посимвольного набора; html — что добавляем в терминал когда строка допечатана
-  const lines = [
-    { raw: "handshake: SYN / ACK…", html: "handshake: <span style='color:#34d399;'>SYN / ACK…</span>" },
-    { raw: "cipher: chacha20-poly1305", html: "cipher: <span style='color:#4da3ff;'>chacha20-poly1305</span>" },
-    { raw: "routing node: med.subprocess_02", html: "routing node: <span style='color:#a9b8ff;'>med.subprocess_02</span>" },
-    { raw: "firewall bypass: ghost_net relay", html: "firewall bypass: <span style='color:#ff4567;'>ghost_net</span> relay" },
-    { raw: "status: encrypted uplink — ONLINE", html: "status: <b><span style='color:#34d399;'>encrypted uplink — ONLINE</span></b>" },
-    { raw: "// incoming: classified feed [LEAK_00]", html: "<span style='color:#ffcc66;'>// incoming: classified feed [LEAK_00]</span>" }
-  ];
 
-  const term = document.getElementById('terminal');
-  const latestLink = document.getElementById('latestLink');
-
-  let lineIndex = 0;
-  let charIndex = 0;
-  let typedRaw = "";    // visible during typing (plain)
-  let outHTML = "";     // final HTML that we render with innerHTML
-
-  function tick() {
-    if (lineIndex < lines.length) {
-      const current = lines[lineIndex];
-      if (charIndex < current.raw.length) {
-        // печатаем посимвольно ПЛОТНОГО ТЕКСТА (без HTML)
-        typedRaw += current.raw[charIndex++];
-        term.textContent = outHTML.replace(/\n/g, "\n") + typedRaw + (Date.now()%600<300 ? "_" : " ");
-        requestAnimationFrame(tick);
-      } else {
-        // строка допечатана — переносим в outHTML как готовую HTML-строку
-        outHTML += current.html + "<br>";
-        typedRaw = "";
-        lineIndex++;
-        charIndex = 0;
-        // небольшая пауза между строками
-        setTimeout(tick, 220);
-      }
-    } else {
-      // всё готово — финальный статус
-      outHTML += "ready.";
-      term.innerHTML = outHTML;
-      latestLink.href = './video/teaser.mp4';
-    }
-  }
-
-  // старт
-  setTimeout(tick, 300);
-</script>
 
 </body>
 </html>
