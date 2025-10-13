@@ -175,19 +175,31 @@
   100% {opacity: 1; transform: translate(0,0);}
 }
 
-/* === Terminal CSS Typewriter (color-safe) === */
-.term-log { font-family:"JetBrains Mono", monospace; line-height:1.6; }
-.term-log .line{
-  --chars: 32;           /* кол-во символов (оценочно) */
-  --delay: 0s;           /* задержка старта */
-  display:inline-block;
-  white-space:nowrap;
-  /* вместо width-анимации — точный "срез" текста */
-  clip-path: inset(0 100% 0 0);
-  animation: typeclip 1.4s steps(var(--chars)) var(--delay) forwards;
-  will-change: clip-path;
+/* === Terminal: per-line typewriter via clip-path === */
+.term-log { 
+  font-family: "JetBrains Mono", monospace; 
+  line-height: 1.6; 
+  display: grid; 
+  align-items: start; 
+  gap: 0;
 }
-@keyframes typeclip{ to { clip-path: inset(0 0 0 0); } }
+.term-log .line {
+  display: block;                 /* каждая строка отдельным блоком */
+  white-space: nowrap;
+  will-change: clip-path;
+  clip-path: inset(0 100% 0 0);   /* скрыто всё справа */
+  animation: typeclip var(--dur,0.9s) steps(var(--chars,32)) var(--delay,0s) forwards;
+}
+@keyframes typeclip { to { clip-path: inset(0 0 0 0); } }
+
+/* мигающий курсор только на активной строке */
+.term-log .line.typing::after {
+  content:"_";
+  margin-left: 0;
+  animation: caret .5s step-end infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
+
 
 /* курсор на последней строке во время «набора» */
 .term-log .line.typing::after {
