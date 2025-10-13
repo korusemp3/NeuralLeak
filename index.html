@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeuralLeak — Grey.Protocol / K0R_MED</title>
+  <meta name="description" content="Anonymous shadow feed: leaks, field logs, AI frames. truth bleeds through the wires." />
+  <meta name="theme-color" content="#0b0f14" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#06080c;          /* deep void */
+      --fg:#d9e2ff;          /* ice */
+      --muted:#6d7a99;       /* slate */
+      --blue:#4da3ff;        /* neon blue */
+      --red:#ff4567;         /* neon red */
+      --grid:#0d121b;        /* grid tint */
+      --ok:#34d399;          /* status ok */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(1200px 800px at 70% -10%, #0a101a 0%, var(--bg) 60%) no-repeat var(--bg);
+      color:var(--fg); font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      overflow-x:hidden;
+    }
+    .frame{position:relative; min-height:100%; display:flex; align-items:center; justify-content:center; padding:6vmin}
+
+    /* subtle data grid */
+    .frame::before{
+      content:""; position:absolute; inset:0; background:
+        linear-gradient(transparent 95%, rgba(77,163,255,.12) 96%) 0 0/ 100% 28px,
+        linear-gradient(90deg, transparent 95%, rgba(255,69,103,.12) 96%) 0 0/ 28px 100%;
+      mask-image: radial-gradient(900px 600px at 60% 20%, #000 10%, transparent 70%);
+      pointer-events:none;
+    }
+
+    .wrap{width:min(980px,100%); border:1px solid rgba(77,163,255,.18); background:#070a10cc; backdrop-filter: blur(6px);
+      box-shadow:0 0 0 1px rgba(255,69,103,.08) inset, 0 20px 60px rgba(0,0,0,.35);
+      border-radius:14px; overflow:hidden; position:relative}
+
+    .scanline{position:absolute; inset:0; mix-blend-mode:screen; opacity:.04; pointer-events:none;
+      background: repeating-linear-gradient( to bottom, #fff 0 1px, transparent 1px 3px );
+      animation:scan 7s linear infinite}
+    @keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+
+    .top{
+      display:flex; align-items:center; gap:10px; padding:14px 16px; background:linear-gradient(180deg, #0b1220, #060a12);
+      border-bottom:1px solid rgba(77,163,255,.2);
+      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:.2px
+    }
+
+    .logo{display:inline-flex; align-items:center; gap:10px}
+    .sig{width:28px; height:28px; border-radius:50%; position:relative; isolation:isolate;
+      display:grid; place-items:center; font-weight:700; }
+    .sig::before, .sig::after{content:""; position:absolute; inset:-2px; border-radius:inherit; filter:blur(6px);}
+    .sig::before{background:radial-gradient(circle at 30% 30%, var(--blue), transparent 40%), radial-gradient(circle at 70% 70%, var(--red), transparent 45%);
+      opacity:.9; mix-blend-mode:screen}
+    .sig::after{border:1px solid rgba(255,255,255,.14)}
+    .sig i{position:relative; font-style:normal; color:#fff; text-shadow:0 0 6px rgba(77,163,255,.6), 0 0 10px rgba(255,69,103,.4)}
+
+    .meta{margin-left:auto; font-size:12px; color:var(--muted)}
+
+    .hero{padding:26px 18px 10px; display:grid; gap:10px}
+
+    .term{
+      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#05080e; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; position:relative;
+      overflow:hidden; min-height:116px;
+    }
+    .term .hdr{color:var(--muted); font-size:12px; display:flex; gap:10px; align-items:center; opacity:.9}
+    .term .dot{width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 10px var(--ok)}
+    .term pre{margin:8px 0 0; line-height:1.6; font-size:14px; white-space:pre-wrap}
+
+    .slogan{padding:0 2px 8px 2px; color:#a9b8ff; letter-spacing:.3px; text-transform:uppercase; font-size:12px; opacity:.9}
+
+    .gallery{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; padding:0 2px 20px}
+    .card{position:relative; border:1px solid rgba(77,163,255,.18); background:linear-gradient(180deg,#0a0f19,#070b12); border-radius:12px; overflow:hidden}
+    .card .ph{aspect-ratio:16/9; background:linear-gradient(90deg, rgba(77,163,255,.24), rgba(255,69,103,.24)); filter:grayscale(.3) contrast(1.2); display:grid; place-items:center}
+    .card .ph span{font-family:"JetBrains Mono"; font-size:12px; color:#e3ecffaa}
+    .card .cap{padding:10px 12px; font-size:12px; color:var(--muted)}
+
+    /* glitch */
+    .glitch{position:relative; display:inline-block}
+    .glitch::before, .glitch::after{content:attr(data-txt); position:absolute; left:0; top:0; clip-path: inset(0 0 0 0);}
+    .glitch::before{transform:translate(1px,0); color:var(--blue); mix-blend-mode:screen; animation:g1 1.6s infinite steps(2,end)}
+    .glitch::after{transform:translate(-1px,0); color:var(--red); mix-blend-mode:screen; animation:g2 1.9s infinite steps(2,end)}
+    @keyframes g1{50%{clip-path:inset(0 0 60% 0)} 51%{clip-path:inset(40% 0 0 0)}}
+    @keyframes g2{60%{clip-path:inset(0 0 20% 0)} 61%{clip-path:inset(80% 0 0 0)}}
+
+    footer{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-top:1px solid rgba(77,163,255,.2); background:#070b12}
+    .tiny{font-size:11px; color:var(--muted)}
+    .links a{color:#b6c7ff; text-decoration:none; border-bottom:1px dashed rgba(77,163,255,.5)}
+
+    /* entry pulse */
+    @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
+    .wrap{animation:pop .6s ease-out}
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="wrap">
+      <div class="scanline" aria-hidden="true"></div>
+      <header class="top">
+        <div class="logo">
+          <div class="sig" aria-hidden="true"><i>⎈</i></div>
+          <div>
+            <div style="font-weight:700; letter-spacing:.4px">NeuralLeak</div>
+            <div class="slogan">truth bleeds through the wires</div>
+          </div>
+        </div>
+        <div class="meta">Grey.Protocol / K0R_MED</div>
+      </header>
+
+      <section class="hero">
+        <div class="term" role="region" aria-label="terminal">
+          <div class="hdr"><span class="dot"></span> <span> &gt; connecting… user: <b>K0R_MED</b></span></div>
+          <pre id="terminal"></pre>
+        </div>
+
+        <div class="gallery" aria-label="latest frames">
+          <article class="card">
+            <div class="ph"><span class="glitch" data-txt="AI FRAME — 01">AI FRAME — 01</span></div>
+            <div class="cap">drop your first still into <code>/assets/</code> and link it here</div>
+          </article>
+          <article class="card">
+            <div class="ph"><span class="glitch" data-txt="FIELD LOG — 00">FIELD LOG — 00</span></div>
+            <div class="cap">short teaser (10–20s) goes to <code>/video/</code></div>
+          </article>
+        </div>
+      </section>
+
+      <footer>
+        <div class="tiny">© grey.protocol — autonomous relay node</div>
+        <div class="links tiny">
+          <a href="#" id="latestLink">latest leak</a>
+        </div>
+      </footer>
+    </div>
+  </div>
+
+  <script>
+    // typewriter with glitch ticks
+    const lines = [
+      "handshake: SYN / ACK…", 
+      "cipher: chacha20-poly1305", 
+      "route: ghost_net → med.subprocess", 
+      "status: online — reading…",
+      "// hint: replace this log with your latest leak title"
+    ];
+    const term = document.getElementById('terminal');
+    const latestLink = document.getElementById('latestLink');
+
+    let i = 0, j = 0, out = "";
+    function tick(){
+      if(i < lines.length){
+        const s = lines[i];
+        if(j < s.length){
+          out += s[j++];
+          term.textContent = out + (Date.now()%600<300?"_":" ");
+          requestAnimationFrame(tick);
+        } else {
+          out += "\n"; i++; j = 0; setTimeout(tick, 250);
+        }
+      } else {
+        term.textContent = out + "ready. ";
+        latestLink.href = './video/teaser.mp4';
+      }
+    }
+    setTimeout(tick, 300);
+
+    // mild entry glitch on load
+    addEventListener('load', () => {
+      const w = document.querySelector('.wrap');
+      w.animate([
+        {filter:'none'},
+        {filter:'contrast(1.6) saturate(1.4) hue-rotate(8deg)'},
+        {filter:'none'}
+      ], {duration: 420, iterations: 1});
+    });
+  </script>
+</body>
+</html>
