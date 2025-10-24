@@ -1,0 +1,494 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>NeuralLeak — Grey.Protocol / K0R_MED</title>
+  <meta name="description" content="Anonymous shadow feed: leaks, field logs, AI frames. truth bleeds through the wires." />
+  <meta name="theme-color" content="#0b0f14" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;700&family=Inter:wght@300;500;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --bg:#06080c;          /* deep void */
+      --fg:#d9e2ff;          /* ice */
+      --muted:#6d7a99;       /* slate */
+      --blue:#4da3ff;        /* neon blue */
+      --red:#ff4567;         /* neon red */
+      --grid:#0d121b;        /* grid tint */
+      --ok:#34d399;          /* status ok */
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background:radial-gradient(1200px 800px at 70% -10%, #0a101a 0%, var(--bg) 60%) no-repeat var(--bg);
+      color:var(--fg); font-family:"Inter", system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji", "Segoe UI Emoji";
+      overflow-x:hidden;
+    }
+    .frame{position:relative; min-height:100%; display:flex; align-items:center; justify-content:center; padding:6vmin}
+
+    /* subtle data grid */
+    .frame::before{
+      content:""; position:absolute; inset:0; background:
+        linear-gradient(transparent 95%, rgba(77,163,255,.12) 96%) 0 0/ 100% 28px,
+        linear-gradient(90deg, transparent 95%, rgba(255,69,103,.12) 96%) 0 0/ 28px 100%;
+      mask-image: radial-gradient(900px 600px at 60% 20%, #000 10%, transparent 70%);
+      pointer-events:none;
+    }
+
+    .wrap{
+	width:min(1220px,100%);
+	border:1px solid rgba(77,163,255,.18); background:#070a10cc; backdrop-filter: blur(6px);
+	box-shadow:0 0 0 1px rgba(255,69,103,.08) inset, 0 20px 60px rgba(0,0,0,.35);
+	border-radius:14px;overflow:hidden; position:relative;
+	}
+
+.term-log{
+  font-size:15px;
+  line-height:1.25;
+}
+
+.gallery{
+  grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+  gap:16px;
+  padding:0 4px 24px;
+}
+
+.card .cap{
+  font-size:13px;
+}
+
+footer{
+  font-size:12px;
+  padding:16px 20px;
+}
+
+
+    .scanline{position:absolute; inset:0; mix-blend-mode:screen; opacity:.04; pointer-events:none;
+      background: repeating-linear-gradient( to bottom, #fff 0 1px, transparent 1px 3px );
+      animation:scan 7s linear infinite}
+    @keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
+
+    .top{
+      display:flex; align-items:center; gap:10px; padding:14px 16px; background:linear-gradient(180deg, #0b1220, #060a12);
+      border-bottom:1px solid rgba(77,163,255,.2);
+      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; letter-spacing:.2px
+    }
+
+    .logo{display:inline-flex; align-items:center; gap:10px}
+    .sig{width:28px; height:28px; border-radius:50%; position:relative; isolation:isolate;
+      display:grid; place-items:center; font-weight:700; }
+    .sig::before, .sig::after{content:""; position:absolute; inset:-2px; border-radius:inherit; filter:blur(6px);}
+    .sig::before{background:radial-gradient(circle at 30% 30%, var(--blue), transparent 40%), radial-gradient(circle at 70% 70%, var(--red), transparent 45%);
+      opacity:.9; mix-blend-mode:screen}
+    .sig::after{border:1px solid rgba(255,255,255,.14)}
+    .sig i{position:relative; font-style:normal; color:#fff; text-shadow:0 0 6px rgba(77,163,255,.6), 0 0 10px rgba(255,69,103,.4)}
+
+    .meta{margin-left:auto; font-size:12px; color:var(--muted)}
+
+    .hero{padding:26px 18px 10px; display:grid; gap:10px}
+
+    .term{
+      font-family:"JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+      background:#05080e; border:1px solid rgba(255,255,255,.08); border-radius:12px; padding:14px; position:relative;
+      overflow:hidden; min-height:116px;
+    }
+    .term .hdr{color:var(--muted); font-size:12px; display:flex; gap:10px; align-items:center; opacity:.9}
+    .term .dot{width:7px; height:7px; border-radius:50%; background:var(--ok); box-shadow:0 0 10px var(--ok)}
+    .term pre{margin:8px 0 0; line-height:1.6; font-size:14px; white-space:pre-wrap}
+
+    .slogan{padding:0 2px 8px 2px; color:#a9b8ff; letter-spacing:.3px; text-transform:uppercase; font-size:12px; opacity:.9}
+
+    .gallery{display:grid; grid-template-columns:repeat(auto-fit, minmax(220px,1fr)); gap:12px; padding:0 2px 20px}
+    .card{position:relative; border:1px solid rgba(77,163,255,.18); background:linear-gradient(180deg,#0a0f19,#070b12); border-radius:12px; overflow:hidden}
+    .card .ph{aspect-ratio:16/9; background:linear-gradient(90deg, rgba(77,163,255,.24), rgba(255,69,103,.24)); filter:grayscale(.3) contrast(1.2); display:grid; place-items:center}
+    .card .ph span{font-family:"JetBrains Mono"; font-size:12px; color:#e3ecffaa}
+    .card .cap{padding:10px 12px; font-size:12px; color:var(--muted)}
+
+    /* glitch */
+    .glitch{position:relative; display:inline-block}
+    .glitch::before, .glitch::after{content:attr(data-txt); position:absolute; left:0; top:0; clip-path: inset(0 0 0 0);}
+    .glitch::before{transform:translate(1px,0); color:var(--blue); mix-blend-mode:screen; animation:g1 1.6s infinite steps(2,end)}
+    .glitch::after{transform:translate(-1px,0); color:var(--red); mix-blend-mode:screen; animation:g2 1.9s infinite steps(2,end)}
+    @keyframes g1{50%{clip-path:inset(0 0 60% 0)} 51%{clip-path:inset(40% 0 0 0)}}
+    @keyframes g2{60%{clip-path:inset(0 0 20% 0)} 61%{clip-path:inset(80% 0 0 0)}}
+
+    footer{display:flex; align-items:center; justify-content:space-between; gap:12px; padding:14px 16px; border-top:1px solid rgba(77,163,255,.2); background:#070b12}
+    .tiny{font-size:11px; color:var(--muted)}
+    .links a{color:#b6c7ff; text-decoration:none; border-bottom:1px dashed rgba(77,163,255,.5)}
+
+/* === LOGO GLITCH EFFECT === */
+.sig img {
+  animation: logoPulse 3s ease-in-out infinite, logoGlitch 1.8s steps(2, end) infinite;
+  filter: drop-shadow(0 0 6px rgba(255,255,255,0.6)) brightness(1.2);
+}
+
+@keyframes logoPulse {
+  0%, 100% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.04);
+  }
+}
+
+@keyframes logoGlitch {
+  0%, 90%, 100% {
+    transform: translate(0, 0);
+    filter: drop-shadow(0 0 6px rgba(255,255,255,0.5));
+  }
+  10% {
+    transform: translate(1px, -1px);
+  }
+  20% {
+    transform: translate(-1px, 1px);
+  }
+  25% {
+    filter: hue-rotate(20deg) drop-shadow(0 0 8px rgba(255,255,255,0.7));
+  }
+  30% {
+    transform: translate(-1px, -1px);
+  }
+}
+
+/* === Hover Leak Overlay === */
+.hoverleak {
+  position: relative;
+  overflow: hidden;
+}
+
+.hoverleak .overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  opacity: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity .3s ease, backdrop-filter .3s ease;
+  backdrop-filter: blur(2px);
+}
+
+.hoverleak:hover .overlay {
+  opacity: 1;
+  backdrop-filter: blur(4px);
+}
+
+.hoverleak .overlay-text {
+  color: #d9e2ff;
+  font-family: "JetBrains Mono", monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  text-align: center;
+  padding: 10px 14px;
+  border: 1px solid rgba(77,163,255,.25);
+  background: rgba(10,15,25,0.45);
+  box-shadow: 0 0 14px rgba(77,163,255,.2);
+  border-radius: 8px;
+  animation: textGlitch 2s infinite steps(2,end);
+}
+
+@keyframes textGlitch {
+  10% {opacity: 0.9; transform: translate(1px,-1px);}
+  12% {opacity: 1; transform: translate(-1px,1px);}
+  20% {opacity: 1;}
+  70% {opacity: 0.98;}
+  100% {opacity: 1; transform: translate(0,0);}
+}
+
+/* === Terminal: per-line typewriter via clip-path === */
+.term-log { 
+  font-family: "JetBrains Mono", monospace; 
+  font-size: 14px;
+  line-height: 1.1; 
+  display: grid; 
+  align-items: start; 
+  gap: 0;
+}
+.term-log .line {
+  display: block;                 /* каждая строка отдельным блоком */
+  white-space: nowrap;
+  will-change: clip-path;
+  clip-path: inset(0 100% 0 0);   /* скрыто всё справа */
+  animation: typeclip var(--dur,0.9s) steps(var(--chars,32)) var(--delay,0s) forwards;
+}
+@keyframes typeclip { to { clip-path: inset(0 0 0 0); } }
+
+/* мигающий курсор только на активной строке */
+.term-log .line.typing::after {
+  content:"_";
+  margin-left: 0;
+  animation: caret .5s step-end infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
+
+
+/* курсор на последней строке во время «набора» */
+.term-log .line.typing::after {
+  content: "_";
+  margin-left: 0;
+  animation: caret .6s step-end infinite;
+}
+@keyframes caret { 50% { opacity: 0; } }
+
+.overlay-text.alert{
+  color: var(--red);
+  text-shadow: 0 0 10px rgba(255,69,103,.35);
+}
+
+
+    /* entry pulse */
+    @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
+    .wrap{animation:pop .6s ease-out}
+	
+	/* === Uplink Status Bar === */
+.uplink {
+  font-family: "JetBrains Mono", monospace;
+  color: var(--muted);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  letter-spacing: 0.6px;
+}
+.uplink span {
+  color: var(--blue);
+  text-shadow: 0 0 6px rgba(77,163,255,.6), 0 0 10px rgba(255,69,103,.3);
+}
+
+/* === Archive / History === */
+.archive{ padding: 6px 6px 18px; }
+.arch-title{
+  margin: 8px 2px 6px;
+  font: 600 12px "JetBrains Mono", monospace;
+  color: #a9b8ff; text-transform: uppercase; letter-spacing:.3px;
+}
+.arch-list{ 
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:8px;
+}
+.leak{
+  background: linear-gradient(180deg,#0a0f19,#070b12);
+  border:1px solid rgba(77,163,255,.18);
+  border-radius:10px; overflow:hidden;
+}
+.leak-link{
+  display:flex; align-items:center; gap:8px;
+  padding:10px 12px; text-decoration:none;
+  color:var(--fg); font: 500 12px "JetBrains Mono", monospace;
+}
+.leak-link:hover{
+  background:linear-gradient(90deg, rgba(77,163,255,.08), rgba(255,69,103,.06));
+  border-left:2px solid var(--blue);
+  padding-left:10px;
+}
+.dot{width:6px; height:6px; border-radius:50%; box-shadow:0 0 8px currentColor;}
+.dot.ok{ color:#34d399; background:#34d399;}
+.dot.warn{ color:#ffcc66; background:#ffcc66;}
+.dot.err{ color:#ff4567; background:#ff4567;}
+.code{ color:#a9b8ff; font-weight:700; }
+.name{ margin-left:4px; }
+.meta{ margin-left:auto; color:var(--muted); opacity:.9; }
+
+/* спец-эффект только для рикролла :) */
+#rickroll .leak-link:hover .name {
+  animation: flickerFile 0.3s infinite;
+  color: var(--red);
+  text-shadow: 0 0 8px rgba(255,69,103,.5);
+}
+@keyframes flickerFile {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 24%, 55% { opacity: 0.3; }
+}
+
+
+<link rel="icon" type="image/png" href="./assets/sitelogo.png">
+<link rel="shortcut icon" href="./assets/sitelogo.png">
+
+
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="wrap">
+      <div class="scanline" aria-hidden="true"></div>
+      <header class="top">
+        <div class="logo">
+          <div class="sig" aria-hidden="true">
+  <img src="./assets/logo.v1.png" alt="K0R_MED Logo" style="width:28px;height:28px;object-fit:contain;filter:drop-shadow(0 0 4px rgba(255,255,255,0.4));">
+</div>
+
+          <div>
+            <div style="font-weight:700; letter-spacing:.4px">NeuralLeak</div>
+            <div class="slogan">truth bleeds through the wires</div>
+          </div>
+        </div>
+        <div class="meta">Grey.Protocol / K0R_MED</div>
+      </header>
+
+      <section class="hero">
+        <div class="term" role="region" aria-label="terminal">
+  <div class="hdr"><span class="dot"></span> <span> &gt; connecting… user: <b>K0R_MED</b></span></div>
+
+  <div class="term-log">
+    <div class="line typing" style="--chars: 26; --delay: .0s;">
+      handshake: <span style="color:#34d399;">SYN / ACK…</span>
+    </div><br>
+    <div class="line" style="--chars: 30; --delay: .25s;">
+      cipher: <span style="color:#4da3ff;">chacha20-poly1305</span>
+    </div><br>
+    <div class="line" style="--chars: 40; --delay: .50s;">
+      routing node: <span style="color:#a9b8ff;">med.subprocess_02</span>
+    </div><br>
+    <div class="line" style="--chars: 40; --delay: .75s;">
+      firewall bypass: <span style="color:#ff4567;">ghost_net</span> relay
+    </div><br>
+    <div class="line" style="--chars: 40; --delay: 1.00s;">
+      status: <b><span style="color:#34d399;">encrypted uplink — ONLINE</span></b>
+    </div><br>
+    <div class="line" style="--chars: 46; --delay: 1.25s;">
+      <span style="color:#ffcc66;">// incoming: classified feed [LEAK_00]</span>
+    </div><br>
+    <div class="line" style="--chars: 6; --delay: 1.50s;">
+      ready.
+    </div>
+  </div>
+</div>
+
+
+        <div class="gallery" aria-label="latest frames">
+
+<section class="archive" aria-label="leak archive">
+  <h3 class="arch-title">Archive — all leaks</h3>
+  <ul class="arch-list">
+    <li class="leak">
+      <a href="#" class="leak-link">
+        <span class="dot ok"></span>
+        <span class="code">LEAK_17</span>
+        <span class="name">civilkidnap_</span>
+        <span class="meta">2076-10-13 · raid</span>
+      </a>
+    </li>
+    <li class="leak">
+      <a href="#" class="leak-link">
+        <span class="dot warn"></span>
+        <span class="code">LEAK_16</span>
+        <span class="name">drone_ha42c2x2zz</span>
+        <span class="meta">2076-10-07 · err0r</span>
+      </a>
+    </li>
+    <li class="leak" id="rickroll">
+  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="leak-link">
+    <span class="dot err"></span>
+    <span class="code">LEAK_15</span>
+    <span class="name">00241024xx</span>
+    <span class="meta">2076-09-29 · err0r</span>
+  </a>
+</li>
+
+  </ul>
+</section>
+
+
+  <!-- 🩸 первый кадр — с эффектом наведения -->
+  <article class="card hoverleak">
+    <img src="./assets/frame1test.png" alt="AI Frame 01" class="ph" style="object-fit:cover;width:100%;aspect-ratio:16/9;">
+    <div class="overlay">
+      <div class="overlay-text">
+        <b>[ACCESS: K0R_MED]</b><br>
+        «Двое в масках черепов. Работают быстро, без слов.<br>
+        Уводят раненого с кибер-рукой — похищение.<br>
+        <b>[SIGNAL LOST…]</b>
+      </div>
+    </div>
+    <div class="cap">FRAME_17 — civilkidnap_</div>
+  </article>
+
+  <!-- 💽 второй кадр — стандартный (остался как был) -->
+  <article class="card hoverleak" id="fieldlog">
+  <img src="./assets/cyberzayc.png" alt="FIELD LOG — 00" class="ph" style="object-fit:cover;width:100%;aspect-ratio:16/9;">
+  <div class="overlay">
+    <div class="overlay-text">
+      <b>[FIELD LOG — 00]</b><br>
+      Похищения. Шаблон: лица сняты, жертвы — известные.<br>
+      Прилагаю фото причастных. Вероятно марионетки.<br>
+      <b>[TRACE: LOST]</b>
+    </div>
+  </div>
+  <div class="cap">LOG_00 — faceless</div>
+</article>
+
+
+</div>
+
+
+      <footer>
+  <div class="tiny">
+    © grey.protocol — autonomous relay node
+  </div>
+  <div class="tiny uplink">
+    uplink: <span id="uplinkData">A2F3-C7E9-9B01</span>
+  </div>
+</footer>
+
+    </div>
+  </div>
+
+<script>
+const uplink = document.getElementById("uplinkData");
+const chars = "ABCDEF0123456789";
+
+function updateUplink() {
+  const newStr = Array.from({ length: 12 }, () => chars[Math.floor(Math.random() * chars.length)]).join("");
+  const formatted = newStr.match(/.{1,4}/g).join("-");
+  
+  // 🔧 плавная замена без мерцания
+  if (uplink.textContent !== formatted) {
+    uplink.style.transition = "opacity 0.2s ease";
+    uplink.style.opacity = "0.6";
+    setTimeout(() => {
+      uplink.textContent = formatted;
+      uplink.style.opacity = "1";
+    }, 100);
+  }
+}
+
+setInterval(updateUplink, 1000);
+</script>
+
+<script>
+  const card = document.getElementById('fieldlog');
+  if (card) {
+    const overlay = card.querySelector('.overlay');
+    if (overlay) {
+      overlay.dataset.orig = overlay.innerHTML;
+
+      const lockedMessage = `
+        <div class="overlay-text alert">
+          <b>Если ты это читаешь</b><br>
+          и ты тот, кто тянет за нитки — знай:<br>
+          <b>я уже режу их по одной.</b>
+        </div>
+      `;
+
+      card.addEventListener('click', (e) => {
+        overlay.innerHTML = lockedMessage;
+        overlay.dataset.locked = '1';
+        e.stopPropagation();
+      });
+
+      card.addEventListener('mouseleave', () => {
+        if (overlay.dataset.locked) {
+          overlay.innerHTML = overlay.dataset.orig;
+          delete overlay.dataset.locked;
+        }
+      });
+    }
+  }
+</script>
+
+
+</body>
+</html>
