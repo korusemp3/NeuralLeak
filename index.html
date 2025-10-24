@@ -253,6 +253,41 @@ footer{
   text-shadow: 0 0 6px rgba(77,163,255,.6), 0 0 10px rgba(255,69,103,.3);
 }
 
+/* === Archive / History === */
+.archive{ padding: 6px 6px 18px; }
+.arch-title{
+  margin: 8px 2px 6px;
+  font: 600 12px "JetBrains Mono", monospace;
+  color: #a9b8ff; text-transform: uppercase; letter-spacing:.3px;
+}
+.arch-list{ 
+  list-style:none; margin:0; padding:0;
+  display:grid; grid-template-columns:repeat(auto-fit,minmax(280px,1fr)); gap:8px;
+}
+.leak{
+  background: linear-gradient(180deg,#0a0f19,#070b12);
+  border:1px solid rgba(77,163,255,.18);
+  border-radius:10px; overflow:hidden;
+}
+.leak-link{
+  display:flex; align-items:center; gap:8px;
+  padding:10px 12px; text-decoration:none;
+  color:var(--fg); font: 500 12px "JetBrains Mono", monospace;
+}
+.leak-link:hover{
+  background:linear-gradient(90deg, rgba(77,163,255,.08), rgba(255,69,103,.06));
+  border-left:2px solid var(--blue);
+  padding-left:10px;
+}
+.dot{width:6px; height:6px; border-radius:50%; box-shadow:0 0 8px currentColor;}
+.dot.ok{ color:#34d399; background:#34d399;}
+.dot.warn{ color:#ffcc66; background:#ffcc66;}
+.dot.err{ color:#ff4567; background:#ff4567;}
+.code{ color:#a9b8ff; font-weight:700; }
+.name{ margin-left:4px; }
+.meta{ margin-left:auto; color:var(--muted); opacity:.9; }
+
+
 <link rel="icon" type="image/png" href="./assets/sitelogo.png">
 <link rel="shortcut icon" href="./assets/sitelogo.png">
 
@@ -308,6 +343,37 @@ footer{
 
 
         <div class="gallery" aria-label="latest frames">
+
+<section class="archive" aria-label="leak archive">
+  <h3 class="arch-title">Archive — all leaks</h3>
+  <ul class="arch-list">
+    <li class="leak">
+      <a href="#" class="leak-link">
+        <span class="dot ok"></span>
+        <span class="code">LEAK_17</span>
+        <span class="name">civilkidnap_</span>
+        <span class="meta">2025-10-13 · raid</span>
+      </a>
+    </li>
+    <li class="leak">
+      <a href="#" class="leak-link">
+        <span class="dot warn"></span>
+        <span class="code">LEAK_16</span>
+        <span class="name">drone_harvest</span>
+        <span class="meta">2025-10-07 · corporate</span>
+      </a>
+    </li>
+    <li class="leak">
+      <a href="#" class="leak-link">
+        <span class="dot err"></span>
+        <span class="code">LEAK_15</span>
+        <span class="name">hive_collapse</span>
+        <span class="meta">2025-09-29 · biohazard</span>
+      </a>
+    </li>
+  </ul>
+</section>
+
 
   <!-- 🩸 первый кадр — с эффектом наведения -->
   <article class="card hoverleak">
