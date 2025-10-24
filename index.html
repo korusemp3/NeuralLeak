@@ -400,7 +400,7 @@ footer{
       <b>[TRACE: LOST]</b>
     </div>
   </div>
-  <div class="cap">LOG_00 — forgotten_zone</div>
+  <div class="cap">LOG_00 — faceless</div>
 </article>
 
 
@@ -441,6 +441,48 @@ function updateUplink() {
 setInterval(updateUplink, 1000);
 </script>
 
+<script>
+  // находим все карточки с hoverleak
+  document.querySelectorAll('.card.hoverleak').forEach(card => {
+    const overlay = card.querySelector('.overlay');
+    if (!overlay) return;
+
+    // сохраняем оригинальный HTML оверлея
+    overlay.dataset.orig = overlay.innerHTML;
+
+    // сообщение, которое должно показываться по клику
+    const lockedMessage = `
+      <div class="overlay-text">
+        <b>Если ты это читаешь</b><br>
+        и ты тот, кто тянет за нитки — знай:<br>
+        <b>я уже режу их по одной.</b>
+      </div>
+    `;
+
+    // на клик — заменяем временно содержимое
+    card.addEventListener('click', (e) => {
+      // если клик произошёл не внутри overlay — всё равно сработает (норм)
+      overlay.innerHTML = lockedMessage;
+      // пометка, чтобы понять что сейчас показываем locked message
+      overlay.dataset.locked = '1';
+      // предотвращаем "перекрытие" системного поведения кликов (если нужно)
+      e.stopPropagation();
+    });
+
+    // при уходе мыши — восстанавливаем оригинал
+    card.addEventListener('mouseleave', () => {
+      if (overlay.dataset.locked) {
+        overlay.innerHTML = overlay.dataset.orig;
+        delete overlay.dataset.locked;
+      }
+    });
+
+    // (опционально) при повторном наведении можно вернуть оригинал, если нужно
+    card.addEventListener('mouseenter', () => {
+      // ничего не делаем — hover CSS покажет overlay; если оно было заменено, leave вернёт его
+    });
+  });
+</script>
 
 </body>
 </html>
