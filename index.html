@@ -292,6 +292,17 @@ footer{
 .name{ margin-left:4px; }
 .meta{ margin-left:auto; color:var(--muted); opacity:.9; }
 
+/* спец-эффект только для рикролла :) */
+#rickroll .leak-link:hover .name {
+  animation: flickerFile 0.3s infinite;
+  color: var(--red);
+  text-shadow: 0 0 8px rgba(255,69,103,.5);
+}
+@keyframes flickerFile {
+  0%, 19%, 21%, 23%, 25%, 54%, 56%, 100% { opacity: 1; }
+  20%, 22%, 24%, 55% { opacity: 0.3; }
+}
+
 
 <link rel="icon" type="image/png" href="./assets/sitelogo.png">
 <link rel="shortcut icon" href="./assets/sitelogo.png">
@@ -368,14 +379,15 @@ footer{
         <span class="meta">2076-10-07 · err0r</span>
       </a>
     </li>
-    <li class="leak">
-      <a href="#" class="leak-link">
-        <span class="dot err"></span>
-        <span class="code">LEAK_15</span>
-        <span class="name">00241024xx</span>
-        <span class="meta">2076-09-29 · err0r</span>
-      </a>
-    </li>
+    <li class="leak" id="rickroll">
+  <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ" target="_blank" class="leak-link">
+    <span class="dot err"></span>
+    <span class="code">LEAK_15</span>
+    <span class="name">00241024xx</span>
+    <span class="meta">2076-09-29 · err0r</span>
+  </a>
+</li>
+
   </ul>
 </section>
 
