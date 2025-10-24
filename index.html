@@ -234,6 +234,11 @@ footer{
 }
 @keyframes caret { 50% { opacity: 0; } }
 
+.overlay-text.alert{
+  color: var(--red);
+  text-shadow: 0 0 10px rgba(255,69,103,.35);
+}
+
 
     /* entry pulse */
     @keyframes pop{0%{transform:scale(.98); opacity:0}100%{transform:scale(1); opacity:1}}
@@ -390,7 +395,7 @@ footer{
   </article>
 
   <!-- 💽 второй кадр — стандартный (остался как был) -->
-  <article class="card hoverleak">
+  <article class="card hoverleak" id="fieldlog">
   <img src="./assets/cyberzayc.png" alt="FIELD LOG — 00" class="ph" style="object-fit:cover;width:100%;aspect-ratio:16/9;">
   <div class="overlay">
     <div class="overlay-text">
@@ -442,47 +447,36 @@ setInterval(updateUplink, 1000);
 </script>
 
 <script>
-  // находим все карточки с hoverleak
-  document.querySelectorAll('.card.hoverleak').forEach(card => {
+  const card = document.getElementById('fieldlog');
+  if (card) {
     const overlay = card.querySelector('.overlay');
-    if (!overlay) return;
+    if (overlay) {
+      overlay.dataset.orig = overlay.innerHTML;
 
-    // сохраняем оригинальный HTML оверлея
-    overlay.dataset.orig = overlay.innerHTML;
+      const lockedMessage = `
+        <div class="overlay-text alert">
+          <b>Если ты это читаешь</b><br>
+          и ты тот, кто тянет за нитки — знай:<br>
+          <b>я уже режу их по одной.</b>
+        </div>
+      `;
 
-    // сообщение, которое должно показываться по клику
-    const lockedMessage = `
-      <div class="overlay-text">
-        <b>Если ты это читаешь</b><br>
-        и ты тот, кто тянет за нитки — знай:<br>
-        <b>я уже режу их по одной.</b>
-      </div>
-    `;
+      card.addEventListener('click', (e) => {
+        overlay.innerHTML = lockedMessage;
+        overlay.dataset.locked = '1';
+        e.stopPropagation();
+      });
 
-    // на клик — заменяем временно содержимое
-    card.addEventListener('click', (e) => {
-      // если клик произошёл не внутри overlay — всё равно сработает (норм)
-      overlay.innerHTML = lockedMessage;
-      // пометка, чтобы понять что сейчас показываем locked message
-      overlay.dataset.locked = '1';
-      // предотвращаем "перекрытие" системного поведения кликов (если нужно)
-      e.stopPropagation();
-    });
-
-    // при уходе мыши — восстанавливаем оригинал
-    card.addEventListener('mouseleave', () => {
-      if (overlay.dataset.locked) {
-        overlay.innerHTML = overlay.dataset.orig;
-        delete overlay.dataset.locked;
-      }
-    });
-
-    // (опционально) при повторном наведении можно вернуть оригинал, если нужно
-    card.addEventListener('mouseenter', () => {
-      // ничего не делаем — hover CSS покажет overlay; если оно было заменено, leave вернёт его
-    });
-  });
+      card.addEventListener('mouseleave', () => {
+        if (overlay.dataset.locked) {
+          overlay.innerHTML = overlay.dataset.orig;
+          delete overlay.dataset.locked;
+        }
+      });
+    }
+  }
 </script>
+
 
 </body>
 </html>
